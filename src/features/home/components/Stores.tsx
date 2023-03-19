@@ -3,14 +3,16 @@ import { useStores } from "../api/getStores";
 import { StoreCard } from "@/components/Elements";
 import { Store } from "../types";
 import { StoreCardLoader } from "@/components/Skeletons";
+import { matchSorter } from "match-sorter";
 
 interface StoresProps {
+  search?: string;
   categoryId?: string | null;
 }
 
 const PAGE_OFFSET = 9;
 
-export const Stores: React.FC<StoresProps> = ({ categoryId }) => {
+export const Stores: React.FC<StoresProps> = ({ search, categoryId }) => {
   const { isLoading, data: storesData } = useStores();
   const [page, setPage] = useState(0);
 
@@ -19,23 +21,33 @@ export const Stores: React.FC<StoresProps> = ({ categoryId }) => {
     setPage(0);
   }, [categoryId]);
 
-  const storesByCategories = useMemo(() => {
-    if (storesData && categoryId) {
-      return storesData.filter((s) => s.categoryId === categoryId);
+  const filteredStores = useMemo(() => {
+    if (storesData) {
+      let data = storesData;
+
+      if (categoryId) {
+        data = storesData.filter((s) => s.categoryId === categoryId);
+      }
+
+      if (search) {
+        data = matchSorter(data, search, { keys: ["name"] });
+      }
+
+      return data;
     }
 
-    return storesData;
-  }, [storesData, categoryId]);
+    return null;
+  }, [storesData, categoryId, search]);
 
   // Paging store list cause large data json
   // TODO: change to paging with api to reduce request time
   const stores = useMemo(() => {
-    if (storesByCategories) {
-      return storesByCategories.slice(0, (page + 1) * PAGE_OFFSET);
+    if (filteredStores) {
+      return filteredStores.slice(0, (page + 1) * PAGE_OFFSET);
     }
 
     return [];
-  }, [storesByCategories, page]);
+  }, [filteredStores, page]);
 
   const handleLoadMore = () => {
     setPage(page + 1);
@@ -63,6 +75,14 @@ export const Stores: React.FC<StoresProps> = ({ categoryId }) => {
       <div className="stores__error">
         <h2>Ooops, something went wrong</h2>
         <button className="btn">Refresh</button>
+      </div>
+    );
+  }
+
+  if (!filteredStores || filteredStores.length === 0) {
+    return (
+      <div className="stores__not-found">
+        <h2>No match found for "{search}"</h2>
       </div>
     );
   }
