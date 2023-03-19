@@ -11,6 +11,7 @@ interface StoresProps {
 }
 
 const PAGE_OFFSET = 9;
+const SEARCH_KEY = ["name"];
 
 export const Stores: React.FC<StoresProps> = ({ search, categoryId }) => {
   const { isLoading, data: storesData } = useStores();
@@ -30,7 +31,7 @@ export const Stores: React.FC<StoresProps> = ({ search, categoryId }) => {
       }
 
       if (search) {
-        data = matchSorter(data, search, { keys: ["name"] });
+        data = matchSorter(data, search, { keys: SEARCH_KEY });
       }
 
       return data;

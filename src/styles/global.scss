@@ -41,7 +41,10 @@ body {
   }
 
   &__categories {
-    padding-bottom: v.$spacing-4;
+    padding-bottom: v.$spacing;
+    margin-bottom: v.$spacing-3;
+    overflow-y: hidden;
+    overflow-x: auto;
   }
 }
 
@@ -52,6 +55,7 @@ body {
   width: fit-content;
   border-radius: v.$border-radius;
   border: 1px solid v.$primary-color;
+  overflow: visible;
 
   &__item {
     display: inline-flex;
@@ -120,4 +124,20 @@ body {
   width: 1200px;
   max-width: 100%;
   margin: 0 auto;
+}
+
+/* Styles for tablet & mobile devices */
+@media only screen and (max-width: 1023px) {
+  .home {
+      &__navbar {
+        padding-bottom: v.$spacing-2;
+      }
+  
+      &__categories {
+        padding-bottom: v.$spacing;
+        margin-bottom: v.$spacing;
+        overflow-y: hidden;
+        overflow-x: auto;
+      }
+    }
 }
