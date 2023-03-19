@@ -1,0 +1,43 @@
+@use "@/styles/variables" as v;
+
+.container {
+  display: flex;
+  align-items: center;
+  padding-left: 12px;
+  padding-right: 8px;
+  background-color: #fafafa;
+  border-radius: v.$border-radius;
+  border: 1px solid #e1e1e1;
+}
+
+.input {
+  flex: 1;
+  height: 32px;
+  margin: 8px;
+  border: none;
+  background-color: inherit;
+
+  &:focus, &:active {
+    box-shadow: none;
+    outline: 0px;
+  }
+}
+
+.icon {
+  width: 24px;
+  height: 24px;
+}
+
+.btn_clear {
+  width: 36px;
+  height: 36px;
+  background-color: transparent;
+  box-shadow: none;
+  border: none;
+  cursor: pointer;
+
+  &:hover {
+    border-radius: 50%;
+    background-color: #f2f2f2;
+  }
+}

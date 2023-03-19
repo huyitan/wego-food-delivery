@@ -3,9 +3,26 @@ import Head from "next/head";
 import "@/styles/normalize.scss";
 import "@/styles/global.scss";
 
+import type { NextPage } from "next";
 import type { AppProps } from "next/app";
+import { useMemo } from "react";
+import { AppProvider } from "@/providers/app";
 
-export default function MyApp({ Component, pageProps }: AppProps) {
+export type NextPageWithLayout<P = {}> = NextPage<P> & {
+  getLayout?: (page: React.ReactNode) => React.ReactNode;
+};
+
+export type AppPropsWithLayout = AppProps & {
+  Component: NextPageWithLayout;
+};
+
+export default function MyApp({ Component, pageProps }: AppPropsWithLayout) {
+  // Use the layout defined at the page level, if available
+  const getLayout = useMemo(
+    () => Component.getLayout ?? ((page: React.ReactElement) => page),
+    [Component.getLayout]
+  );
+
   return (
     <>
       <Head>
@@ -32,7 +49,7 @@ export default function MyApp({ Component, pageProps }: AppProps) {
         <meta name="twitter:card" content="summary_large_image" />
         <link rel="icon" href="/favicon.ico" />
       </Head>
-      <Component {...pageProps} />
+      <AppProvider>{getLayout(<Component {...pageProps} />)}</AppProvider>
     </>
   );
 }

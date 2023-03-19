@@ -1,6 +1,7 @@
 import Axios from 'axios';
 
 import { BASE_URL } from '@/config';
+console.log("🚀 ~ file: axios.ts:4 ~ BASE_URL:", BASE_URL)
 
 export const axios = Axios.create({
   baseURL: BASE_URL,

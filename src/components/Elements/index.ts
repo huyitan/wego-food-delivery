@@ -1,2 +1,3 @@
 export * from './SearchInput';
-export * from './Card'
+export * from './Chip';
+export * from './StoreCard'
