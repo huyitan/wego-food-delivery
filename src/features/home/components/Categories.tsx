@@ -4,24 +4,19 @@ import { useCategories } from "../api/getCategories";
 import { Category } from "../types";
 import { ALL_CATEGORIES_ID } from "@/utils/constans";
 import { useRouter } from "next/router";
+import { CategoriesLoader } from "@/components/Skeletons";
 
 const allCategories: Category = { id: ALL_CATEGORIES_ID, name: "All" };
 
-interface Categories {}
+interface Categories {
+  onSelected?: (id: string | null) => void;
+}
 
-export const Categories: React.FC<Categories> = () => {
+export const Categories: React.FC<Categories> = ({ onSelected }) => {
   const router = useRouter();
   const [selectedCategory, setSelectedCategory] = useState(ALL_CATEGORIES_ID);
   const { isLoading, data } = useCategories();
   const isFirstTimeRender = useRef(true);
-
-  const categoriesData = useMemo(() => {
-    if (data && data.length > 0) {
-      return [allCategories, ...data];
-    }
-
-    return data || [];
-  }, [data]);
 
   useEffect(() => {
     // get category from url query string on first render
@@ -36,6 +31,7 @@ export const Categories: React.FC<Categories> = () => {
 
       if (category) {
         setSelectedCategory(category.id);
+        onSelected?.call(null, category.id);
       }
     }
   }, [router, data]);
@@ -45,8 +41,13 @@ export const Categories: React.FC<Categories> = () => {
 
     // Update selected category to url query string
     // trigger filter on stores list & get better UX
+    onSelected?.call(
+      null,
+      (category.id !== allCategories.id && category.id) || null
+    );
+
     router.replace(
-      { query: { ...router.query, t: category.name } },
+      { query: { ...router.query, category: category.name } },
       undefined,
       {
         shallow: true,
@@ -54,8 +55,20 @@ export const Categories: React.FC<Categories> = () => {
     );
   };
 
+  const categoriesData = useMemo(() => {
+    if (data && data.length > 0) {
+      return [allCategories, ...data];
+    }
+
+    return data || [];
+  }, [data]);
+
   if (isLoading) {
-    return <div>loading</div>;
+    return (
+      <div className="categories__loader">
+        <CategoriesLoader />
+      </div>
+    );
   }
 
   if (!data) return null;

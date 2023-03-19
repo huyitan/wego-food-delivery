@@ -78,12 +78,16 @@ body {
       background-color: v.$primary-color;
     }
   }
+
+  &__loader {
+    max-width: 500px;
+  }
   
 }
 
 .stores {
   padding-bottom: 120px;
-  
+
   &__error {
     display: flex;
     flex-direction: column;
@@ -102,6 +106,13 @@ body {
     display: flex;
     justify-content: center;
     padding: v.$spacing-4 v.$spacing-2;
+  }
+
+  &__loader {
+    display: grid;
+      gap: v.$spacing-2;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      grid-template-rows: 1fr;
   }
 }
 

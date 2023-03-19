@@ -8,9 +8,14 @@ import clsx from "clsx";
 
 export interface StoreCardProps {
   data: Store;
+  onClick?: (data: Store) => void;
 }
 
-export const StoreCard: React.FC<StoreCardProps> = ({ data }) => {
+export const StoreCard: React.FC<StoreCardProps> = ({ data, onClick }) => {
+  const handleClick = () => {
+    onClick?.call(null, data);
+  };
+
   const estimatedTime = useMemo(() => {
     if (data?.minCookTime && data?.maxCookTime) {
       return `${data?.minCookTime}-${data?.maxCookTime} min`;
@@ -48,8 +53,10 @@ export const StoreCard: React.FC<StoreCardProps> = ({ data }) => {
     }
   }, [data?.promotion]);
 
+  const rating = Math.round(data?.rating * 10) / 10;
+
   return (
-    <div className={styles.card}>
+    <div className={styles.card} onClick={handleClick}>
       {promotion}
 
       <div className={styles.image}>
@@ -62,7 +69,7 @@ export const StoreCard: React.FC<StoreCardProps> = ({ data }) => {
           <Chip>
             <IconStarFilled size={16} fill="#7a8189" />
             &nbsp;
-            <span>{data?.rating}</span>
+            <span>{rating}</span>
           </Chip>
 
           {estimatedTime && <Chip>{estimatedTime}</Chip>}
