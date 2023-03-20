@@ -6,7 +6,7 @@ import { Stores } from "./components/Stores";
 
 interface HomeProps {}
 
-const Home: React.FC<HomeProps> = () => {
+export const Home: React.FC<HomeProps> = () => {
   const [searchKeyword, setSearchKeyword] = useState("");
   const debouncedSearchKeyword = useDebounce(searchKeyword, 350);
   const [category, setCategory] = useState<string | null>(null);
@@ -21,21 +21,19 @@ const Home: React.FC<HomeProps> = () => {
 
   return (
     <div className="home">
-      <div className="home__navbar">
+      <div className="home__navbar" data-testid="navbar">
         <SearchInput
           className="home__search"
           placeholder="Enter restaurant name..."
           onChange={handleSearch}
         />
       </div>
-      <div className="home__categories">
+      <div className="home__categories" data-testid="categories">
         <Categories onSelected={handleSelectCategory} />
       </div>
-      <div className="home__stores">
+      <div className="home__stores" data-testid="stores">
         <Stores search={debouncedSearchKeyword} categoryId={category} />
       </div>
     </div>
   );
 };
-
-export default Home;

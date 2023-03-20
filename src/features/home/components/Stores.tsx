@@ -4,14 +4,12 @@ import { StoreCard } from "@/components/Elements";
 import { Store } from "../types";
 import { StoreCardLoader } from "@/components/Skeletons";
 import { matchSorter } from "match-sorter";
+import { PAGE_OFFSET, SEARCH_KEY } from "@/utils/constants";
 
 interface StoresProps {
   search?: string;
   categoryId?: string | null;
 }
-
-const PAGE_OFFSET = 9;
-const SEARCH_KEY = ["name"];
 
 export const Stores: React.FC<StoresProps> = ({ search, categoryId }) => {
   const { isLoading, data: storesData } = useStores();
@@ -60,7 +58,7 @@ export const Stores: React.FC<StoresProps> = ({ search, categoryId }) => {
 
   if (isLoading) {
     return (
-      <div className="stores__loader">
+      <div className="stores__loader" data-testid="stores-loader">
         <StoreCardLoader />
         <StoreCardLoader />
         <StoreCardLoader />
@@ -73,7 +71,7 @@ export const Stores: React.FC<StoresProps> = ({ search, categoryId }) => {
 
   if (!storesData) {
     return (
-      <div className="stores__error">
+      <div className="stores__error" data-testid="stores-error">
         <h2>Ooops, something went wrong</h2>
         <button className="btn">Refresh</button>
       </div>
@@ -82,7 +80,7 @@ export const Stores: React.FC<StoresProps> = ({ search, categoryId }) => {
 
   if (!filteredStores || filteredStores.length === 0) {
     return (
-      <div className="stores__not-found">
+      <div className="stores__not-found" data-testid="stores-not-found">
         <h2>No match found for "{search}"</h2>
       </div>
     );
@@ -95,9 +93,13 @@ export const Stores: React.FC<StoresProps> = ({ search, categoryId }) => {
           <StoreCard key={store.id} data={store} onClick={handleSelectStore} />
         ))}
       </div>
-      {stores.length < storesData?.length && (
+      {stores.length < filteredStores?.length && (
         <div className="stores__load-more">
-          <button className="btn" onClick={handleLoadMore}>
+          <button
+            className="btn"
+            data-testid="stores-load-more"
+            onClick={handleLoadMore}
+          >
             + Show More
           </button>
         </div>

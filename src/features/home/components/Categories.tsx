@@ -2,7 +2,7 @@ import clsx from "clsx";
 import { useEffect, useMemo, useRef, useState } from "react";
 import { useCategories } from "../api/getCategories";
 import { Category } from "../types";
-import { ALL_CATEGORIES_ID } from "@/utils/constans";
+import { ALL_CATEGORIES_ID } from "@/utils/constants";
 import { useRouter } from "next/router";
 import { CategoriesLoader } from "@/components/Skeletons";
 
@@ -65,7 +65,7 @@ export const Categories: React.FC<Categories> = ({ onSelected }) => {
 
   if (isLoading) {
     return (
-      <div className="categories__loader">
+      <div className="categories__loader" data-testid="categories-loader">
         <CategoriesLoader />
       </div>
     );
@@ -82,6 +82,7 @@ export const Categories: React.FC<Categories> = ({ onSelected }) => {
             "categories__item",
             category?.id === selectedCategory && "categories__item--selected"
           )}
+          data-testid="categories-item"
           onClick={() => handleSelectCategory(category)}
         >
           {category?.name}

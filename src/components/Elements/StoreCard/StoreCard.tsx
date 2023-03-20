@@ -56,7 +56,7 @@ export const StoreCard: React.FC<StoreCardProps> = ({ data, onClick }) => {
   const rating = Math.round(data?.rating * 10) / 10;
 
   return (
-    <div className={styles.card} onClick={handleClick}>
+    <div className={styles.card} data-testid="store-card" onClick={handleClick}>
       {promotion}
 
       <div className={styles.image}>

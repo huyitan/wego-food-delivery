@@ -16,7 +16,7 @@ export interface SearchInputProps {
 
 export const SearchInput: React.FC<SearchInputProps> = ({
   className = "",
-  value,
+  value = "",
   placeholder = "",
   onFocus,
   onBlur,
